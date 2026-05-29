@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <h2>Ваша корзина</h2>
+
+  {% if cart_items %}
+    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+      <tr>
+        <th style="text-align:left; border-bottom:1px solid #ddd; padding:5px;">Товар</th>
+        <th style="text-align:right; border-bottom:1px solid #ddd; padding:5px;">Цена</th>
+        <th style="text-align:center; border-bottom:1px solid #ddd; padding:5px;">Кол-во</th>
+        <th style="text-align:right; border-bottom:1px solid #ddd; padding:5px;">Сумма</th>
+        <th style="text-align:center; border-bottom:1px solid #ddd; padding:5px;">Удалить</th>
+      </tr>
+      {% for item in cart_items %}
+        <tr>
+          <td style="padding:5px;">
+            {% if item.image_path %}
+              <img src="{% static item.image_path %}" alt="{{ item.title }}" style="max-width: 50px; margin-right: 10px;">
+            {% endif %}
+            {{ item.title }}
+          </td>
+          <td style="padding:5px; text-align:right;">{{ item.price }} ₽</td>
+          <td style="padding:5px; text-align:center;">
+            <form action="{% url 'catalog:update_cart_quantity' item.id %}" method="post" style="display: inline;">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width: 60px;">
+              <button type="submit" style="background: #ff1493; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;">Обновить</button>
+            </form>
+          </td>
+          <td style="padding:5px; text-align:right;">{{ item.total }} ₽</td>
+          <td style="padding:5px; text-align:center;">
+            <a href="{% url 'catalog:remove_from_cart' item.id %}" style="color: #d1005a; text-decoration: none;">Удалить</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <p style="margin-top:15px; font-weight:bold;">
+      Итого: {{ total_price }} ₽
+    </p>
+
+    <a href="{% url 'catalog:clear_cart' %}"
+       style="display:inline-block; margin-top:10px; color:#d1005a;">
+      Очистить корзину
+    </a>
+  {% else %}
+    <p>Корзина пока пустая.</p>
+  {% endif %}
+{% endblock %}

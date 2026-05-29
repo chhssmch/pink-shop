@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load socialaccount %} 
+
+{% block content %}
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ff1493; border-radius: 10px;">
+    <h2>Вход в PinkStore</h2>
+    
+    <form method="post">
+        {% csrf_token %} {{ form.as_p }} <button type="submit" style="background: #ff1493; color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+            Войти
+        </button>
+    </form>
+    
+    <p style="margin-top: 15px;">
+        Нет аккаунта? <a href="{% url 'users:register' %}" style="color: #ff1493;">Зарегистрироваться</a>
+    </p>
+    
+    <p style="margin-top: 5px; font-size: 14px;">
+        Забыли пароль?
+        <a href="{% url 'users:password_reset' %}" style="color: #ff1493;">Сбросить</a>
+    </p>
+
+    <hr style="margin: 20px 0;">
+    <p style="text-align: center; margin-bottom: 10px;">Или войдите через</p>
+    <a href="{% provider_login_url 'github' %}"
+       style="display: block; text-align: center; background: #24292e; color: white; padding: 10px;
+       border-radius: 5px; text-decoration: none;">
+        Войти через GitHub
+    </a>
+    
+</div>
+{% endblock %}

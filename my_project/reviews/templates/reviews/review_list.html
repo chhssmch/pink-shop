@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2 style="color: #ff1493;">💬 Отзывы наших модниц</h2>
+    <div class="reviews-container">
+        {% for review in reviews %}
+            <div class="review-item" style="border-left: 5px solid #ffb6c1; margin-bottom: 20px; padding-left: 15px;">
+                <p><strong>Товар:</strong> {{ review.product.title }}</p>
+                <p><em>"{{ review.text }}"</em></p>
+                <p style="color: #ff69b4;">Оценка: {{ review.rating }} / 5 🌸</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

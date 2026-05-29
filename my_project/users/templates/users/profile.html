@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div style="max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ff1493; border-radius: 10px;">
+    <h2>Личный кабинет 🌸</h2>
+    
+    <p><strong>Логин:</strong> {{ request.user.username }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+
+
+    <hr>
+    <h3>Редактировать данные:</h3>
+    
+    <form method="post">
+        {% csrf_token %} {{ form.as_p }} <button type="submit" style="background: #ff1493; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Сохранить изменения
+        </button>
+    </form>
+    
+    <hr>
+    <h4>Ваши отзывы:</h4>
+    <ul>
+        {% for review in reviews %}
+            <li>{{ review.product.title }}: {{ review.rating }} ⭐</li>
+        {% empty %}
+            <li>Вы еще не оставляли отзывов.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

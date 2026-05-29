@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>{{ product.title }}</h2>
+    {% if product.image_path %}
+    <div style="margin: 15px 0;">
+        <img src="{% static product.image_path %}"
+        alt="{{ product.title }}"
+        style="max-width: 300px; border-radius: 10px;">
+    </div>
+    {% endif %}
+    <p>{{ product.description }}</p>
+
+    <p style="color: #ff1493; font-weight: bold; font-size: 20px;">Цена: {{ product.price }} ₽</p>
+    <a href="{% url 'catalog:add_to_cart' product.id %}" style="display:inline-block;margin:10px 0;background:#ff1493;color:#fff;padding:8px 16px;border-radius:5px;text-decoration:none;">
+    Добавить в корзину
+</a>
+
+    <hr>
+   {% if request.user.is_authenticated %}
+        <h3>Оставить отзыв 💖</h3>
+        <form action="{% url 'reviews:add_review' product.id %}" method="post">
+            {% csrf_token %} {{ form.as_p }} <button type="submit" style="background: #ff1493; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                Отправить отзыв
+            </button>
+        </form>
+    {% else %}
+        <div style="background: #fff0f5; padding: 15px; border-radius: 5px; border: 1px solid #ffb6c1;">
+            <p>Только зарегистрированные пользователи могут оставлять отзывы.</p>
+            <a href="{% url 'users:login' %}" style="color: #ff1493; font-weight: bold;">Войти</a> или 
+            <a href="{% url 'users:register' %}" style="color: #ff1493; font-weight: bold;">Зарегистрироваться</a>
+        </div>
+    {% endif %}
+
+
+    <hr>
+    <h3>Отзывы:</h3>
+
+    {% for review in reviews %}
+        <div style="border-left: 3px solid #ffb6c1; padding-left: 10px; margin-bottom: 10px;">
+            <p><strong>{{ review.user.username }}</strong> (Оценка: {{ review.rating }}/5)</p>
+            <p>{{ review.text }}</p>
+            {% if request.user == review.user %}
+            </div style="margin-top; 10px">
+            <a href="{% url 'reviews:edit_review' review.id %}" style="text-decoration: none; border: 1px solid #ffb6c1; color: #ff1493; padding: 5px 10px; border-radius: 5px; font-size: 14px;">
+                Изменить
+            </a>                
+            <a href="{% url 'reviews:delete_review' review.id %}" style="text-decoration: none; border: 1px solid #ff69b4; background: #fff0f5; color: #d1005a; padding: 5px 10px; border-radius: 5px; font-size: 14px; margin-left: 10px;">
+                Удалить
+            </a>  
+
+                </div>
+                {% endif %}
+        </div>
+    {% empty %}
+        <p style="color: #888;">Отзывов пока нет. Будьте первыми!</p>
+    {% endfor %}
+{% endblock %}
