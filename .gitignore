@@ -23,3 +23,5 @@ media/
 # Временные файлы операционных систем
 .DS_Store
 Thumbs.db
+venv/
+venv/
